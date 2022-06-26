@@ -36,7 +36,10 @@ export async function sendTelemetryForPythonKernelExecutable(
     }
     try {
         traceVerbose('Begin sendTelemetryForPythonKernelExecutable');
-        const outputs = await executeSilently(kernel.session, 'import sys\nprint(sys.executable)');
+        const outputs = await executeSilently(
+            kernel.session,
+            'import sys as _VSCODE_sys\nprint(sys.executable); del _VSCODE_sys'
+        );
         if (outputs.length === 0) {
             return;
         }
