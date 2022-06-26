@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 import { assert } from 'chai';
@@ -134,9 +135,18 @@ suite('3rd Party Kernel Service API', function () {
             'Kernel notebook is not the active notebook'
         );
 
-        assert.strictEqual(kernels![0].metadata, pythonKernel, 'Kernel Connection is not the same');
+        assert.deepEqual(
+            JSON.parse(JSON.stringify(kernels![0].metadata)),
+            JSON.parse(JSON.stringify(pythonKernel)),
+            `Kernel Connection is not the same`
+        );
+
         const kernel = kernelService?.getKernel(nb.uri);
-        assert.strictEqual(kernels![0].metadata, kernel!.metadata, 'Kernel Connection not same for the document');
+        assert.deepEqual(
+            JSON.parse(JSON.stringify(kernels![0].metadata)),
+            JSON.parse(JSON.stringify(kernel!.metadata)),
+            `Kernel Connection is not the same`
+        );
 
         await closeNotebooksAndCleanUpAfterTests(disposables);
 
