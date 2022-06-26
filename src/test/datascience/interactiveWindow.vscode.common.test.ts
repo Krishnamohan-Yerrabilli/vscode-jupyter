@@ -68,6 +68,7 @@ suite(`Interactive window execution`, async function () {
         }
         sinon.restore();
         await closeNotebooksAndCleanUpAfterTests(disposables);
+        traceInfo(`Ended Test (completed) ${this.currentTest?.title}`);
     });
 
     test('Execute cell from Python file', async () => {
