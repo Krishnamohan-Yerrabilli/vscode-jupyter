@@ -72,6 +72,10 @@ suite('IPyWidget Script Manager', function () {
         kernel = kernelProvider.get(notebook.uri)!;
         scriptManager = widgetScriptManagerFactory.getOrCreate(kernel);
     });
+    setup(async function () {
+        traceInfo(`Starting Test ${this.currentTest?.title}`);
+    });
+
     teardown(async function () {
         traceInfo(`Ended Test ${this.currentTest?.title}`);
         if (this.currentTest?.isFailed()) {
