@@ -138,14 +138,22 @@ suite('3rd Party Kernel Service API', function () {
         assert.deepEqual(
             JSON.parse(JSON.stringify(kernels![0].metadata)),
             JSON.parse(JSON.stringify(pythonKernel)),
-            `Kernel Connection is not the same`
+            `Kernel Connection is not the same, actual ${JSON.stringify(
+                kernels![0].metadata,
+                undefined,
+                3
+            )}, expected ${JSON.stringify(pythonKernel, undefined, 3)}`
         );
 
         const kernel = kernelService?.getKernel(nb.uri);
         assert.deepEqual(
             JSON.parse(JSON.stringify(kernels![0].metadata)),
             JSON.parse(JSON.stringify(kernel!.metadata)),
-            `Kernel Connection is not the same`
+            `Kernel Connection is not the same ${JSON.stringify(
+                kernels![0].metadata,
+                undefined,
+                3
+            )}, expected ${JSON.stringify(kernel!.metadata, undefined, 3)}`
         );
 
         await closeNotebooksAndCleanUpAfterTests(disposables);
