@@ -21,6 +21,7 @@ import { captureScreenShot, createEventHandler, IExtensionTestApi } from '../com
 import { IVSCodeNotebook } from '../../platform/common/application/types';
 import { IS_REMOTE_NATIVE_TEST } from '../constants.node';
 import { workspace } from 'vscode';
+import { KernelConnectionMetadata } from '../../kernels/types';
 
 // eslint-disable-next-line
 suite('3rd Party Kernel Service API', function () {
@@ -67,7 +68,13 @@ suite('3rd Party Kernel Service API', function () {
         traceInfo(`Ended Test (completed) ${this.currentTest?.title}`);
     });
     suiteTeardown(() => closeNotebooksAndCleanUpAfterTests(disposables));
-
+    function getMetadataForComparison(metadata: KernelConnectionMetadata) {
+        metadata = JSON.parse(JSON.stringify(metadata));
+        if ('kernelSpec' in metadata) {
+            metadata.kernelSpec.specFile = undefined;
+        }
+        return metadata;
+    }
     test('List kernel specs', async () => {
         const kernelService = await api.getKernelService();
 
@@ -136,8 +143,8 @@ suite('3rd Party Kernel Service API', function () {
         );
 
         assert.deepEqual(
-            JSON.parse(JSON.stringify(kernels![0].metadata)),
-            JSON.parse(JSON.stringify(pythonKernel)),
+            getMetadataForComparison(kernels![0].metadata as any),
+            getMetadataForComparison(pythonKernel as any),
             `Kernel Connection is not the same, actual ${JSON.stringify(
                 kernels![0].metadata,
                 undefined,
@@ -147,8 +154,8 @@ suite('3rd Party Kernel Service API', function () {
 
         const kernel = kernelService?.getKernel(nb.uri);
         assert.deepEqual(
-            JSON.parse(JSON.stringify(kernels![0].metadata)),
-            JSON.parse(JSON.stringify(kernel!.metadata)),
+            getMetadataForComparison(kernels![0].metadata as any),
+            getMetadataForComparison(kernel!.metadata as any),
             `Kernel Connection is not the same ${JSON.stringify(
                 kernels![0].metadata,
                 undefined,
